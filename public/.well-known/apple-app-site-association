@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "WL8JM9B5Q2.com.stojanrajkovic.Vagabundo",
+        "paths": [
+          "/p/*",
+          "/*/p/*"
+        ]
+      }
+    ]
+  }
+}
