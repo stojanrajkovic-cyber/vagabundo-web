@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         source: '/terms-of-service-tos',
         destination: '/terms',
         permanent: true
+      },
+      {
+      source: '/ai-content-disclaimer',
+      destination: '/terms',
+      permanent: true
       }
     ];
   }
