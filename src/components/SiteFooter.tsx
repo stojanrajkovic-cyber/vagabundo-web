@@ -23,11 +23,11 @@ export default function SiteFooter() {
           className="mt-3 flex justify-center gap-6 text-sm"
           style={{ color: theme.textSecondary }}
         >
-          <a href="https://vagabundo.app/privacy-policy/" className="hover:underline">
+          <a href="/privacy" className="hover:underline">
             Privacy Policy
           </a>
 
-          <a href="https://vagabundo.app/terms-of-service-tos/" className="hover:underline">
+          <a href="/terms" className="hover:underline">
             Terms
           </a>
 
