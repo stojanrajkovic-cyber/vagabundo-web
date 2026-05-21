@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { theme } from "@/lib/theme";
+import ItinerarySection from "@/components/ItinerarySection";
 import {
   getCityBySlug,
   getStarterSeoCities,
@@ -102,50 +104,11 @@ export async function generateMetadata({
   };
 }
 
-function SectionCard({
-  title,
-  items
-}: {
-  title: string;
-  items: string[];
-}) {
-  return (
-    <div
-      className="rounded-2xl border p-5"
-      style={{
-        backgroundColor: theme.surfaceSoft,
-        borderColor: theme.border
-      }}
-    >
-      <h3
-        className="mb-3 text-base font-semibold"
-        style={{ color: theme.textPrimary }}
-      >
-        {title}
-      </h3>
-
-      <ul className="space-y-2">
-        {items.map((item, index) => (
-          <li
-            key={`${title}-${index}-${item}`}
-            className="flex items-start gap-3 leading-7"
-            style={{ color: theme.textSecondary }}
-          >
-            <span
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-              style={{ backgroundColor: theme.accent }}
-            />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 export default async function CitySeoPage({ params }: PageProps) {
   const { locale, slug } = await params;
   const city = getCityBySlug(slug);
+  const t = await getTranslations();
 
   if (!city) {
     notFound();
@@ -203,19 +166,19 @@ export default async function CitySeoPage({ params }: PageProps) {
                 backgroundColor: theme.surface
             }}
             >
-            {locale === "bs" ? "Saznaj više" : "Learn more"}
+            {t("learn_more")}
             </Link>
 
             <a
               href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="inline-flex items-center"
             >
               <img
                 src="/appstore-badge.svg"
                 alt="Download on the App Store"
-                className="h-14"
+                className="h-14 w-auto"
               />
             </a>
           </div>
@@ -278,9 +241,9 @@ export default async function CitySeoPage({ params }: PageProps) {
               </div>
 
               <div className="grid gap-4 md:grid-cols-3">
-                <SectionCard title="Morning" items={day.morning} />
-                <SectionCard title="Afternoon" items={day.afternoon} />
-                <SectionCard title="Evening" items={day.evening} />
+                <ItinerarySection title="Morning" items={day.morning} />
+                <ItinerarySection title="Afternoon" items={day.afternoon} />
+                <ItinerarySection title="Evening" items={day.evening} />
               </div>
             </section>
           ))}

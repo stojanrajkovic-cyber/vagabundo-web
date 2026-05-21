@@ -27,8 +27,7 @@ function getPreferredLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Ako korisnik otvori share link bez locale prefiksa, npr. /p/abc123
-    // preusmjeri ga na /en/p/abc123 ili drugi preferirani jezik iz browsera.
+    // Redirect bare share links to the locale-prefixed version
     if (pathname.startsWith("/p/")) {
         const locale = getPreferredLocale(request);
 
@@ -38,9 +37,12 @@ export function proxy(request: NextRequest) {
         return NextResponse.redirect(url);
     }
 
-    return NextResponse.next();
+    const locale = pathname.startsWith("/bs") ? "bs" : "en";
+    const response = NextResponse.next();
+    response.headers.set("x-locale", locale);
+    return response;
 }
 
 export const config = {
-    matcher: ["/p/:path*"]
+    matcher: ["/((?!_next|api|favicon.ico|icon.png).*)"]
 };

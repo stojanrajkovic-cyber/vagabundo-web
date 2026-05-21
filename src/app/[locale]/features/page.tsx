@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -95,9 +96,11 @@ function ScreenshotCard({
         className="overflow-hidden rounded-2xl border"
         style={{ borderColor: theme.border }}
       >
-        <img
+        <Image
           src={imageSrc}
           alt={title}
+          width={600}
+          height={400}
           className="h-auto w-full object-cover"
         />
       </div>
@@ -169,13 +172,13 @@ export default async function FeaturesPage({ params }: PageProps) {
             <a
               href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="inline-flex items-center"
             >
               <img
                 src="/appstore-badge.svg"
                 alt="Download on the App Store"
-                className="h-14"
+                className="h-14 w-auto"
               />
             </a>
           </div>

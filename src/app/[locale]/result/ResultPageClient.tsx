@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import HeroBanner from "@/components/HeroBanner";
+import ItinerarySection from "@/components/ItinerarySection";
 import { theme } from "@/lib/theme";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -53,48 +55,9 @@ function isGeneratedPlan(value: unknown): value is GeneratedPlan {
   );
 }
 
-function SectionBlock({
-  title,
-  items
-}: {
-  title: string;
-  items: string[];
-}) {
-  return (
-    <div
-      className="rounded-2xl border p-5"
-      style={{
-        backgroundColor: theme.surfaceSoft,
-        borderColor: theme.border
-      }}
-    >
-      <h3
-        className="mb-3 text-base font-semibold"
-        style={{ color: theme.textPrimary }}
-      >
-        {title}
-      </h3>
-
-      <ul className="space-y-2">
-        {items.map((item, index) => (
-          <li
-            key={`${title}-${index}-${item}`}
-            className="flex items-start gap-3 leading-7"
-            style={{ color: theme.textSecondary }}
-          >
-            <span
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-              style={{ backgroundColor: theme.accent }}
-            />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 function AppCTASection({ locale }: { locale: string }) {
+  const t = useTranslations();
   return (
     <section
       className="rounded-3xl border p-8 text-center shadow-sm md:p-10"
@@ -194,18 +157,18 @@ function AppCTASection({ locale }: { locale: string }) {
               backgroundColor: theme.surfaceSoft
             }}
           >
-            {locale === "bs" ? "Saznaj više" : "Learn more"}
+            {t("learn_more")}
           </Link>
 
           <a
             href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             <img
               src="/appstore-badge.svg"
               alt="Download on the App Store"
-              className="inline-flex h-14 items-center justify-center"
+              className="h-14 w-auto"
             />
           </a>
         </div>
@@ -414,9 +377,9 @@ export default function ResultPageClient() {
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <SectionBlock title="Morning" items={day.morning} />
-                  <SectionBlock title="Afternoon" items={day.afternoon} />
-                  <SectionBlock title="Evening" items={day.evening} />
+                  <ItinerarySection title="Morning" items={day.morning} />
+                  <ItinerarySection title="Afternoon" items={day.afternoon} />
+                  <ItinerarySection title="Evening" items={day.evening} />
                 </div>
               </section>
             ))}

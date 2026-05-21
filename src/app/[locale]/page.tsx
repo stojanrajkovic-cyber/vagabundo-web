@@ -1,14 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { initializeCities } from "@/lib/citySearch";
-import CityAutocomplete from "@/components/CityAutocomplete";
-import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { theme } from "@/lib/theme";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PopularDestinations from "@/components/PopularDestinations";
-import Link from "next/link";
+import TripForm from "@/components/TripForm";
+
+type PageProps = {
+  params: Promise<{ locale: string }>;
+};
 
 function HowItWorksCard({
   step,
@@ -42,23 +43,14 @@ function HowItWorksCard({
         {title}
       </h3>
 
-      <p
-        className="leading-7"
-        style={{ color: theme.textSecondary }}
-      >
+      <p className="leading-7" style={{ color: theme.textSecondary }}>
         {description}
       </p>
     </div>
   );
 }
 
-function AppFeatureCard({
-  title,
-  items
-}: {
-  title: string;
-  items: string[];
-}) {
+function AppFeatureCard({ title, items }: { title: string; items: string[] }) {
   return (
     <div
       className="rounded-[24px] border p-6 shadow-sm"
@@ -75,10 +67,7 @@ function AppFeatureCard({
         {title}
       </h3>
 
-      <ul
-        className="space-y-3 leading-7"
-        style={{ color: theme.textSecondary }}
-      >
+      <ul className="space-y-3 leading-7" style={{ color: theme.textSecondary }}>
         {items.map((item) => (
           <li key={item}>• {item}</li>
         ))}
@@ -87,7 +76,8 @@ function AppFeatureCard({
   );
 }
 
-function AppPreviewSection({ locale }: { locale: string }) {
+async function AppPreviewSection({ locale }: { locale: string }) {
+  const t = await getTranslations();
   return (
     <section className="px-6 pb-20">
       <div className="mx-auto max-w-6xl">
@@ -106,10 +96,7 @@ function AppPreviewSection({ locale }: { locale: string }) {
             The web planner is a quick preview
           </h2>
 
-          <p
-            className="text-lg leading-8"
-            style={{ color: theme.textSecondary }}
-          >
+          <p className="text-lg leading-8" style={{ color: theme.textSecondary }}>
             Vagabundo Web gives you a quick AI-generated itinerary. The full experience lives in the iOS app, where trip planning is much richer, more flexible, and built for real travel use.
           </p>
         </div>
@@ -148,18 +135,18 @@ function AppPreviewSection({ locale }: { locale: string }) {
               backgroundColor: theme.surfaceSoft
             }}
           >
-            {locale === "bs" ? "Saznaj više" : "Learn more"}
+            {t("learn_more")}
           </Link>
 
           <a
             href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             <img
               src="/appstore-badge.svg"
               alt="Download on the App Store"
-              className="inline-flex h-14 items-center justify-center"
+              className="h-14 w-auto"
             />
           </a>
         </div>
@@ -182,50 +169,31 @@ function AppPreviewSection({ locale }: { locale: string }) {
           </div>
 
           <div className="grid justify-center gap-8 md:grid-cols-3">
-            <div
-              className="mx-auto w-[260px] overflow-hidden rounded-[36px] border shadow-sm"
-              style={{
-                backgroundColor: theme.surface,
-                borderColor: theme.border,
-                boxShadow: "0 20px 60px rgba(24,50,75,0.18)"
-              }}
-            >
-              <img
-                src="/app-preview/plan.png"
-                alt="Vagabundo plan preview"
-                className="h-full w-full object-cover"
-              />
-            </div>
-
-            <div
-              className="mx-auto w-[260px] overflow-hidden rounded-[36px] border shadow-sm"
-              style={{
-                backgroundColor: theme.surface,
-                borderColor: theme.border,
-                boxShadow: "0 20px 60px rgba(24,50,75,0.18)"
-              }}
-            >
-              <img
-                src="/app-preview/map.png"
-                alt="Vagabundo map preview"
-                className="h-full w-full object-cover"
-              />
-            </div>
-
-            <div
-              className="mx-auto w-[260px] overflow-hidden rounded-[36px] border shadow-sm"
-              style={{
-                backgroundColor: theme.surface,
-                borderColor: theme.border,
-                boxShadow: "0 20px 60px rgba(24,50,75,0.18)"
-              }}
-            >
-              <img
-                src="/app-preview/explore.png"
-                alt="Vagabundo explore preview"
-                className="h-full w-full object-cover"
-              />
-            </div>
+            {(
+              [
+                { src: "/app-preview/plan.png", alt: "Vagabundo plan preview" },
+                { src: "/app-preview/map.png", alt: "Vagabundo map preview" },
+                { src: "/app-preview/explore.png", alt: "Vagabundo explore preview" }
+              ] as const
+            ).map(({ src, alt }) => (
+              <div
+                key={src}
+                className="relative mx-auto h-[520px] w-[260px] overflow-hidden rounded-[36px] border"
+                style={{
+                  backgroundColor: theme.surface,
+                  borderColor: theme.border,
+                  boxShadow: "0 20px 60px rgba(24,50,75,0.18)"
+                }}
+              >
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  className="object-cover"
+                  sizes="260px"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -233,60 +201,8 @@ function AppPreviewSection({ locale }: { locale: string }) {
   );
 }
 
-export default function HomePage() {
-  const [city, setCity] = useState("");
-  const [days, setDays] = useState(3);
-  const [pace, setPace] = useState("balanced");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const router = useRouter();
-  const params = useParams();
-  const locale = typeof params.locale === "string" ? params.locale : "en";
-
-  useEffect(() => {
-    initializeCities();
-  }, []);
-
-  async function handleGenerate() {
-    if (!city) return;
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          city,
-          days,
-          pace
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to generate plan.");
-        setLoading(false);
-        return;
-      }
-
-      sessionStorage.setItem("vagabundo_latest_plan", JSON.stringify(data));
-
-      router.push(
-        `/${locale}/result?city=${encodeURIComponent(city)}&days=${days}&pace=${pace}`
-      );
-    } catch (err) {
-      console.error("Generation error:", err);
-      setError("Unexpected error while generating the plan.");
-    }
-
-    setLoading(false);
-  }
+export default async function HomePage({ params }: PageProps) {
+  const { locale } = await params;
 
   return (
     <main
@@ -319,109 +235,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div
-          className="w-full max-w-xl rounded-[28px] border p-6 shadow-sm md:p-8"
-          style={{
-            backgroundColor: theme.surface,
-            borderColor: theme.border,
-            boxShadow: "0 12px 40px rgba(24, 50, 75, 0.08)"
-          }}
-        >
-          <div className="flex flex-col gap-6 text-left">
-            <div className="flex flex-col gap-2">
-              <label
-                className="text-sm font-medium"
-                style={{ color: theme.textSecondary }}
-              >
-                City
-              </label>
-
-              <CityAutocomplete
-                value={city}
-                onChange={setCity}
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                className="text-sm font-medium"
-                style={{ color: theme.textSecondary }}
-              >
-                Days
-              </label>
-
-              <select
-                value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
-                className="rounded-xl border px-4 py-3 text-lg outline-none transition"
-                style={{
-                  borderColor: theme.border,
-                  backgroundColor: theme.surfaceSoft,
-                  color: theme.textPrimary
-                }}
-              >
-                {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                  <option key={d} value={d}>
-                    {d} {d === 1 ? "day" : "days"}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                className="text-sm font-medium"
-                style={{ color: theme.textSecondary }}
-              >
-                Trip pace
-              </label>
-
-              <select
-                value={pace}
-                onChange={(e) => setPace(e.target.value)}
-                className="rounded-xl border px-4 py-3 text-lg outline-none transition"
-                style={{
-                  borderColor: theme.border,
-                  backgroundColor: theme.surfaceSoft,
-                  color: theme.textPrimary
-                }}
-              >
-                <option value="relaxed">Relaxed</option>
-                <option value="balanced">Balanced</option>
-                <option value="packed">Packed</option>
-              </select>
-            </div>
-
-            <button
-              onClick={handleGenerate}
-              disabled={!city || loading}
-              className="mt-2 rounded-2xl py-4 text-lg font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
-              style={{
-                backgroundColor: theme.accent,
-                boxShadow: "0 10px 24px rgba(198, 146, 20, 0.28)"
-              }}
-              onMouseEnter={(e) => {
-                if (!loading && city) {
-                  e.currentTarget.style.backgroundColor = theme.accentHover;
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = theme.accent;
-              }}
-            >
-              {loading ? "Generating..." : "Generate plan"}
-            </button>
-
-            {error && (
-              <p
-                className="text-sm"
-                style={{ color: "#B42318" }}
-              >
-                {error}
-              </p>
-            )}
-          </div>
-        </div>
+        <TripForm locale={locale} />
       </section>
 
       <section className="px-6 pb-20">
@@ -441,10 +255,7 @@ export default function HomePage() {
               From idea to itinerary in three steps
             </h2>
 
-            <p
-              className="text-lg leading-8"
-              style={{ color: theme.textSecondary }}
-            >
+            <p className="text-lg leading-8" style={{ color: theme.textSecondary }}>
               Vagabundo keeps trip planning simple. Pick a destination, choose your travel style, and get a structured plan you can actually use.
             </p>
           </div>
@@ -455,13 +266,11 @@ export default function HomePage() {
               title="Choose a city"
               description="Search for your destination and pick how many days you want to spend there."
             />
-
             <HowItWorksCard
               step="Step 2"
               title="Set the pace"
               description="Go relaxed, balanced, or packed depending on how you want your days to feel."
             />
-
             <HowItWorksCard
               step="Step 3"
               title="Get your itinerary"
@@ -473,7 +282,7 @@ export default function HomePage() {
 
       <PopularDestinations locale={locale} />
 
-      <AppPreviewSection locale={locale}/>
+      <AppPreviewSection locale={locale} />
 
       <SiteFooter />
     </main>

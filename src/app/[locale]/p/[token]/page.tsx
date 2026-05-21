@@ -97,13 +97,13 @@ export default async function SharedPlanLanding({ params }: Props) {
             <a
               href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="inline-flex items-center"
             >
               <img
                 src="/appstore-badge.svg"
                 alt="Download on the App Store"
-                className="h-14"
+                className="h-14 w-auto"
               />
             </a>
           </div>
