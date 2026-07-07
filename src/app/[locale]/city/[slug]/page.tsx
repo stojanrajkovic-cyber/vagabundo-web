@@ -6,8 +6,8 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { theme } from "@/lib/theme";
 import ItinerarySection from "@/components/ItinerarySection";
-import {
 import StoreBadges from "@/components/StoreBadges";
+import {
   getCityBySlug,
   getStarterSeoCities,
   type SeoCity
