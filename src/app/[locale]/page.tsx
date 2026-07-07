@@ -6,6 +6,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PopularDestinations from "@/components/PopularDestinations";
 import TripForm from "@/components/TripForm";
+import StoreBadges from "@/components/StoreBadges";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -138,17 +139,7 @@ async function AppPreviewSection({ locale }: { locale: string }) {
             {t("learn_more")}
           </Link>
 
-          <a
-            href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/appstore-badge.svg"
-              alt="Download on the App Store"
-              className="h-14 w-auto"
-            />
-          </a>
+          <StoreBadges />
         </div>
 
         <div className="mt-20">

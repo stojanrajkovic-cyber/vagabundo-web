@@ -4,6 +4,7 @@ import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { theme } from "@/lib/theme";
+import StoreBadges from "@/components/StoreBadges";
 
 type PageProps = {
   params: Promise<{
@@ -169,18 +170,7 @@ export default async function FeaturesPage({ params }: PageProps) {
               {isBs ? "Otvori planer" : "Open planner"}
             </Link>
 
-            <a
-              href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-            >
-              <img
-                src="/appstore-badge.svg"
-                alt="Download on the App Store"
-                className="h-14 w-auto"
-              />
-            </a>
+            <StoreBadges />
           </div>
         </div>
       </section>
@@ -411,18 +401,7 @@ export default async function FeaturesPage({ params }: PageProps) {
                 {isBs ? "Otvori planner" : "Open planner"}
               </Link>
 
-              <a
-                href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center"
-              >
-                <img
-                  src="/appstore-badge.svg"
-                  alt="Download on the App Store"
-                  className="h-14"
-                />
-              </a>
+              <StoreBadges />
             </div>
           </div>
         </div>

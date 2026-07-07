@@ -9,6 +9,7 @@ import ItinerarySection from "@/components/ItinerarySection";
 import { theme } from "@/lib/theme";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import StoreBadges from "@/components/StoreBadges";
 
 type DayPlan = {
   day: number;
@@ -160,17 +161,7 @@ function AppCTASection({ locale }: { locale: string }) {
             {t("learn_more")}
           </Link>
 
-          <a
-            href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/appstore-badge.svg"
-              alt="Download on the App Store"
-              className="h-14 w-auto"
-            />
-          </a>
+          <StoreBadges />
         </div>
       </div>
     </section>

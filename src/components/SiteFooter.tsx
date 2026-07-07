@@ -37,6 +37,16 @@ export default function SiteFooter() {
           >
             Vagabundo iOS
           </a>
+
+          {/* TODO: zamijeni pravim Play Store URL-om kad app bude objavljen */}
+          <a
+            href="https://play.google.com/store/apps/details?id=com.stojanrajkovic.vagabundo"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:underline"
+          >
+            Vagabundo Android
+          </a>
         </div>
       </div>
     </footer>

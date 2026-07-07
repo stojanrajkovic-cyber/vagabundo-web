@@ -4,6 +4,7 @@ import { theme } from "@/lib/theme";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import OpenAppRedirect from "@/components/OpenAppRedirect";
+import StoreBadges from "@/components/StoreBadges";
 
 type RouteParams = {
   locale: string;
@@ -94,18 +95,7 @@ export default async function SharedPlanLanding({ params }: Props) {
               {isBs ? "Saznaj više" : "Learn more"}
             </Link>
 
-            <a
-              href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-            >
-              <img
-                src="/appstore-badge.svg"
-                alt="Download on the App Store"
-                className="h-14 w-auto"
-              />
-            </a>
+            <StoreBadges />
           </div>
         </div>
       </section>

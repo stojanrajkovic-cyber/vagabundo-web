@@ -7,6 +7,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { theme } from "@/lib/theme";
 import ItinerarySection from "@/components/ItinerarySection";
 import {
+import StoreBadges from "@/components/StoreBadges";
   getCityBySlug,
   getStarterSeoCities,
   type SeoCity
@@ -169,18 +170,7 @@ export default async function CitySeoPage({ params }: PageProps) {
             {t("learn_more")}
             </Link>
 
-            <a
-              href="https://apps.apple.com/ba/app/vagabundo/id6754535676"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-            >
-              <img
-                src="/appstore-badge.svg"
-                alt="Download on the App Store"
-                className="h-14 w-auto"
-              />
-            </a>
+            <StoreBadges />
           </div>
         </div>
       </section>
